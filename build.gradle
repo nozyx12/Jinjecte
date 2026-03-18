@@ -1,0 +1,64 @@
+plugins {
+    id "java"
+    id "maven-publish"
+}
+
+group = "dev.nozyx"
+version = "1.0.0"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.register("generateSourcesJar", Jar) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allSource
+}
+
+tasks.register("generateJavadocJar", Jar) {
+    archiveClassifier.set("javadoc")
+    from tasks.javadoc
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact(tasks.named("generateSourcesJar").get())
+            artifact(tasks.named("generateJavadocJar").get())
+
+            groupId = group
+            artifactId = "jinjecte"
+            version = version
+        }
+    }
+    repositories {
+        maven {
+            url = uri("$buildDir/repo")
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                "Implementation-Title": "jinjecte",
+                "Implementation-Version": version,
+                "Implementation-Vendor": "nozyx12",
+                "Main-Class": "dev.nozyx.jinjecte.Wrapper"
+        )
+    }
+}

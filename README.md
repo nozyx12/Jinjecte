@@ -1,4 +1,4 @@
-# Jinjecte
+<img src="logo.png" alt="" width="320" height="120" style="border-radius: 20px;"/>
 
 **Jinjecte** is a lightweight command-line utility that allows you to attach to running Java Virtual Machines (JVMs) and perform runtime operations such as querying system properties or injecting Java agents.
 
